@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutoría UX | Gestión de Tutorías Universitarias - FISEI UTA</title>
+  <link rel="stylesheet" href="src/presentation/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-badge" aria-hidden="true">UTA</span>
+        <div>
+          <h1 class="brand-title">Tutoría UX</h1>
+          <p class="brand-subtitle">FISEI · Ingeniería de Software</p>
+        </div>
+      </div>
+      <nav aria-label="Navegación principal" class="main-nav">
+        <button type="button" class="nav-btn is-active" data-view="explorar" aria-current="page">
+          1. Docentes
+        </button>
+        <button type="button" class="nav-btn" data-view="reservar">
+          2. Reservar
+        </button>
+        <button type="button" class="nav-btn" data-view="reservas">
+          3. Mis Reservas <span id="badge-contador-reservas" class="nav-count" aria-label="total de reservas">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido-principal" class="container main-content" tabindex="-1">
+    <!-- Región de notificaciones accesibles -->
+    <div id="region-alertas" class="alert-region" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- VISTA 1: EXPLORAR DOCENTES Y ASIGNATURAS -->
+    <section id="vista-explorar" class="view-section" aria-labelledby="titulo-explorar">
+      <div class="section-header">
+        <h2 id="titulo-explorar">Consulta docentes y asignaturas</h2>
+        <p>Filtra por asignatura, modalidad o nombre del docente para iniciar tu reserva de tutoría.</p>
+      </div>
+
+      <form id="form-filtros-docentes" class="filters-card" role="search" aria-label="Filtrar docentes">
+        <div class="filter-grid">
+          <div class="field-group">
+            <label for="filtro-texto">Buscar docente o asignatura</label>
+            <input
+              type="search"
+              id="filtro-texto"
+              name="texto"
+              placeholder="Ej. Valeria, IHC, Bases de Datos..."
+              autocomplete="off"
+            />
+          </div>
+          <div class="field-group">
+            <label for="filtro-asignatura">Asignatura</label>
+            <select id="filtro-asignatura" name="asignaturaId">
+              <option value="">Todas las asignaturas</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="filtro-modalidad">Modalidad</label>
+            <select id="filtro-modalidad" name="modalidad">
+              <option value="">Todas</option>
+              <option value="Presencial">Presencial</option>
+              <option value="Virtual">Virtual</option>
+            </select>
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button type="button" id="btn-limpiar-filtros" class="btn btn-secondary">Limpiar filtros</button>
+        </div>
+      </form>
+
+      <div id="lista-docentes" class="cards-grid" aria-live="polite"></div>
+    </section>
+
+    <!-- VISTA 2: FORMULARIO DE RESERVA / MODIFICACIÓN -->
+    <section id="vista-reservar" class="view-section" hidden aria-labelledby="titulo-reservar">
+      <div class="section-header">
+        <h2 id="titulo-reservar">Reservar tutoría</h2>
+        <p id="subtitulo-reservar">Completa los datos. Tus selecciones se conservan si regresas a consultar docentes o corriges un error.</p>
+      </div>
+
+      <!-- Indicador de pasos -->
+      <ol class="stepper" aria-label="Progreso de reserva">
+        <li class="stepper-item is-active" id="paso-ind-1">1. Datos y horario</li>
+        <li class="stepper-item" id="paso-ind-2">2. Revisión</li>
+        <li class="stepper-item" id="paso-ind-3">3. Confirmación</li>
+      </ol>
+
+      <form id="form-reserva" class="card-panel" novalidate>
+        <input type="hidden" id="reserva-id-edicion" value="" />
+
+        <div id="paso-formulario">
+          <fieldset class="fieldset-group">
+            <legend>Información académica</legend>
+            <div class="form-grid">
+              <div class="field-group">
+                <label for="campo-docente">Docente <span class="required">*</span></label>
+                <select id="campo-docente" name="docenteId" required aria-describedby="err-docenteId">
+                  <option value="">-- Selecciona un docente --</option>
+                </select>
+                <p id="err-docenteId" class="field-error" role="alert"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="campo-asignatura">Asignatura <span class="required">*</span></label>
+                <select id="campo-asignatura" name="asignaturaId" required aria-describedby="err-asignaturaId">
+                  <option value="">-- Selecciona una asignatura --</option>
+                </select>
+                <p id="err-asignaturaId" class="field-error" role="alert"></p>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="fieldset-group">
+            <legend>Modalidad, fecha y horario</legend>
+            <div class="form-grid">
+              <div class="field-group">
+                <span class="field-label">Modalidad <span class="required">*</span></span>
+                <div class="radio-group" id="grupo-modalidad" role="radiogroup" aria-describedby="err-modalidad">
+                  <label class="radio-pill">
+                    <input type="radio" name="modalidad" value="Presencial" />
+                    <span>Presencial</span>
+                  </label>
+                  <label class="radio-pill">
+                    <input type="radio" name="modalidad" value="Virtual" />
+                    <span>Virtual</span>
+                  </label>
+                </div>
+                <p id="err-modalidad" class="field-error" role="alert"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="campo-fecha">Fecha (lunes a viernes) <span class="required">*</span></label>
+                <input type="date" id="campo-fecha" name="fecha" required aria-describedby="err-fecha" />
+                <p id="err-fecha" class="field-error" role="alert"></p>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <span class="field-label">Horarios disponibles <span class="required">*</span></span>
+              <div id="contenedor-horarios" class="slots-grid" role="radiogroup" aria-label="Horarios disponibles" aria-describedby="err-horario">
+                <p class="hint-text">Selecciona un docente y una fecha para ver los horarios disponibles.</p>
+              </div>
+              <p id="err-horario" class="field-error" role="alert"></p>
+            </div>
+          </fieldset>
+
+          <fieldset class="fieldset-group">
+            <legend>Datos del estudiante</legend>
+            <div class="form-grid">
+              <div class="field-group">
+                <label for="campo-nombre">Nombre completo <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="campo-nombre"
+                  name="estudianteNombre"
+                  placeholder="Ej. Ana Lucía Torres"
+                  required
+                  aria-describedby="err-estudianteNombre"
+                />
+                <p id="err-estudianteNombre" class="field-error" role="alert"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="campo-correo">Correo institucional <span class="required">*</span></label>
+                <input
+                  type="email"
+                  id="campo-correo"
+                  name="estudianteCorreo"
+                  placeholder="Ej. atorres@uta.edu.ec"
+                  required
+                  aria-describedby="err-estudianteCorreo"
+                />
+                <p id="err-estudianteCorreo" class="field-error" role="alert"></p>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="campo-motivo">Tema o consulta de la tutoría <span class="required">*</span></label>
+              <textarea
+                id="campo-motivo"
+                name="motivo"
+                rows="3"
+                placeholder="Describe brevemente tu duda o tema a revisar (mínimo 10 caracteres)"
+                required
+                aria-describedby="err-motivo"
+              ></textarea>
+              <p id="err-motivo" class="field-error" role="alert"></p>
+            </div>
+          </fieldset>
+
+          <div class="form-actions">
+            <button type="button" id="btn-volver-docentes" class="btn btn-secondary">
+              Volver a docentes (conservar datos)
+            </button>
+            <button type="button" id="btn-revisar-reserva" class="btn btn-primary">
+              Revisar reserva
+            </button>
+          </div>
+        </div>
+
+        <!-- PASO 2: REVISIÓN ANTES DE CONFIRMAR -->
+        <div id="paso-revision" hidden>
+          <h3>Revisa tu solicitud antes de confirmar</h3>
+          <p class="hint-text">Puedes regresar a editar cualquier dato sin perder tu selección.</p>
+          <dl id="resumen-revision" class="summary-list"></dl>
+          <div class="form-actions">
+            <button type="button" id="btn-regresar-editar" class="btn btn-secondary">
+              Regresar y editar
+            </button>
+            <button type="submit" id="btn-confirmar-reserva" class="btn btn-primary">
+              Confirmar reserva
+            </button>
+          </div>
+        </div>
+
+        <!-- PASO 3: CONFIRMACIÓN EXITOSA -->
+        <div id="paso-confirmacion" hidden>
+          <div class="success-box" role="status" aria-live="polite">
+            <h3 id="titulo-confirmacion">¡Tutoría confirmada!</h3>
+            <p id="mensaje-confirmacion"></p>
+            <dl id="detalle-confirmacion" class="summary-list"></dl>
+            <div class="form-actions">
+              <button type="button" id="btn-ir-mis-reservas" class="btn btn-primary">
+                Ver mis reservas
+              </button>
+              <button type="button" id="btn-nueva-reserva" class="btn btn-secondary">
+                Agendar otra tutoría
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- VISTA 3: MIS RESERVAS -->
+    <section id="vista-reservas" class="view-section" hidden aria-labelledby="titulo-reservas">
+      <div class="section-header">
+        <h2 id="titulo-reservas">Mis reservas</h2>
+        <p>Consulta el estado de tus tutorías, modifícalas o cancélalas cuando lo necesites.</p>
+      </div>
+
+      <div class="filters-card">
+        <div class="filter-grid">
+          <div class="field-group">
+            <label for="filtro-reservas-texto">Buscar por código, docente o asignatura</label>
+            <input type="search" id="filtro-reservas-texto" placeholder="Ej. TUT-2026, Valeria..." />
+          </div>
+          <div class="field-group">
+            <label for="filtro-reservas-estado">Estado</label>
+            <select id="filtro-reservas-estado">
+              <option value="">Todos los estados</option>
+              <option value="Confirmada">Confirmada</option>
+              <option value="Modificada">Modificada</option>
+              <option value="Cancelada">Cancelada</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div id="lista-reservas" class="reservas-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <!-- DIÁLOGO ACCESIBLE DE CANCELACIÓN -->
+  <dialog id="modal-cancelacion" class="modal-dialog" aria-labelledby="modal-cancel-titulo">
+    <form method="dialog" id="form-cancelacion">
+      <h2 id="modal-cancel-titulo">Cancelar tutoría</h2>
+      <p id="modal-cancel-descripcion">¿Seguro que deseas cancelar esta reserva? El horario quedará disponible para otros estudiantes.</p>
+      <div class="field-group">
+        <label for="motivo-cancelacion">Motivo de cancelación (opcional)</label>
+        <input type="text" id="motivo-cancelacion" placeholder="Ej. Cruce de horario con laboratorio" />
+      </div>
+      <div class="form-actions">
+        <button type="button" id="btn-cerrar-modal-cancel" class="btn btn-secondary">Mantener reserva</button>
+        <button type="submit" id="btn-confirmar-cancelacion" class="btn btn-danger">Sí, cancelar reserva</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <p>Tutoría UX · Universidad Técnica de Ambato · FISEI · Interacción Humano-Computador</p>
+    </div>
+  </footer>
+
+  <script type="module" src="src/presentation/app.js"></script>
+</body>
+</html>
