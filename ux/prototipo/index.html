@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prototipo Interactivo | Tutoría UX - UTA</title>
+  <style>
+    :root {
+      --primary: #8b1e24;
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      --error: #b91c1c;
+      --error-bg: #fee2e2;
+      --ok: #15803d;
+      --ok-bg: #dcfce7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 1rem;
+    }
+    .proto-shell {
+      max-width: 920px;
+      margin: 0 auto;
+      display: grid;
+      gap: 1rem;
+    }
+    .proto-toolbar {
+      background: #1e293b;
+      color: #ffffff;
+      padding: 0.9rem 1rem;
+      border-radius: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+    .proto-toolbar h1 { margin: 0; font-size: 1rem; }
+    .state-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .state-btn {
+      background: #334155;
+      color: #ffffff;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      padding: 0.4rem 0.7rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .state-btn.is-active { background: var(--primary); border-color: #ffffff; font-weight: 700; }
+    .screen {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .banner {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .banner-error { background: var(--error-bg); color: var(--error); border-left: 4px solid var(--error); }
+    .banner-ok { background: var(--ok-bg); color: var(--ok); border-left: 4px solid var(--ok); }
+    .field { margin-bottom: 0.85rem; }
+    .field label { display: block; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.9rem; }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      padding: 0.55rem 0.7rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    .field input.has-error { border-color: var(--error); background: #fff5f5; }
+    .err-msg { color: var(--error); font-size: 0.82rem; margin-top: 0.2rem; font-weight: 600; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: flex-end; margin-top: 1rem; }
+    .btn {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-weight: 600;
+      background: #ffffff;
+    }
+    .btn-primary { background: var(--primary); color: #ffffff; border-color: var(--primary); }
+    .btn-danger { background: var(--error); color: #ffffff; border-color: var(--error); }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; }
+    .card { border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem; background: #f8fafc; }
+    :focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <div class="proto-shell">
+    <header class="proto-toolbar">
+      <h1>Prototipo Interactivo · Tutoría UX (Estados Normales, Error, Recuperación y Confirmación)</h1>
+      <div class="state-tabs" role="tablist" aria-label="Estados del prototipo">
+        <button class="state-btn is-active" data-screen="catalogo">1. Catálogo</button>
+        <button class="state-btn" data-screen="formulario">2. Reserva normal</button>
+        <button class="state-btn" data-screen="error">3. Estado error</button>
+        <button class="state-btn" data-screen="confirmacion">4. Confirmación</button>
+        <button class="state-btn" data-screen="gestion">5. Modificar/Cancelar</button>
+      </div>
+    </header>
+
+    <main id="proto-stage" class="screen" aria-live="polite"></main>
+  </div>
+
+  <script>
+    const protoState = {
+      docente: 'Ing. Valeria Mendoza, Mg.',
+      asignatura: 'Interacción Humano-Computador',
+      modalidad: 'Virtual',
+      fecha: '2026-11-30',
+      horario: '09:00 - 09:30',
+      nombre: 'Ana Lucía Torres',
+      correo: 'atorres@uta.edu.ec',
+      motivo: 'Revisión de heurísticas de Nielsen para el proyecto final.',
+      estadoReserva: 'Confirmada'
+    };
+
+    const stage = document.getElementById('proto-stage');
+    const buttons = document.querySelectorAll('.state-btn');
+
+    function setScreen(name) {
+      buttons.forEach(b => b.classList.toggle('is-active', b.dataset.screen === name));
+
+      if (name === 'catalogo') {
+        stage.innerHTML = `
+          <h2>1. Consulta de Docentes y Asignaturas</h2>
+          <p>Flujo inicial: el estudiante explora docentes y elige uno para iniciar su reserva.</p>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Ing. Valeria Mendoza, Mg.</h3>
+              <p>Asignaturas: IHC, Desarrollo Web</p>
+              <p>Modalidades: Presencial / Virtual</p>
+              <button class="btn btn-primary" onclick="setScreen('formulario')">Reservar con docente</button>
+            </div>
+            <div class="card">
+              <h3>Ing. Carlos Paredes, PhD.</h3>
+              <p>Asignaturas: Ing. Software II, Arquitectura</p>
+              <p>Modalidades: Presencial / Virtual</p>
+              <button class="btn btn-primary" onclick="setScreen('formulario')">Reservar con docente</button>
+            </div>
+          </div>
+        `;
+      } else if (name === 'formulario') {
+        stage.innerHTML = `
+          <h2>2. Formulario de Reserva (Estado Normal)</h2>
+          <p>Los datos seleccionados se conservan al navegar entre pantallas.</p>
+          <div class="grid-2">
+            <div class="field"><label>Docente</label><input value="${protoState.docente}" onchange="protoState.docente=this.value" /></div>
+            <div class="field"><label>Asignatura</label><input value="${protoState.asignatura}" onchange="protoState.asignatura=this.value" /></div>
+            <div class="field"><label>Modalidad</label><input value="${protoState.modalidad}" onchange="protoState.modalidad=this.value" /></div>
+            <div class="field"><label>Fecha y horario</label><input value="${protoState.fecha} · ${protoState.horario}" readonly /></div>
+          </div>
+          <div class="field"><label>Motivo</label><textarea rows="2" onchange="protoState.motivo=this.value">${protoState.motivo}</textarea></div>
+          <div class="actions">
+            <button class="btn" onclick="setScreen('catalogo')">Regresar sin perder datos</button>
+            <button class="btn" onclick="setScreen('error')">Simular error de validación</button>
+            <button class="btn btn-primary" onclick="setScreen('confirmacion')">Confirmar reserva</button>
+          </div>
+        `;
+      } else if (name === 'error') {
+        stage.innerHTML = `
+          <div class="banner banner-error" role="alert">
+            No se pudo completar la reserva: corrige los campos marcados. Tus datos previos se conservaron.
+          </div>
+          <h2>3. Recuperación de Errores</h2>
+          <div class="grid-2">
+            <div class="field"><label>Docente (conservado)</label><input value="${protoState.docente}" readonly /></div>
+            <div class="field"><label>Horario (conservado)</label><input value="${protoState.horario}" readonly /></div>
+            <div class="field">
+              <label>Correo institucional *</label>
+              <input class="has-error" value="correo-invalido" />
+              <div class="err-msg">Ingresa un correo válido (ej. usuario@uta.edu.ec).</div>
+            </div>
+            <div class="field">
+              <label>Fecha *</label>
+              <input class="has-error" value="2026-11-28 (Sábado)" />
+              <div class="err-msg">Las tutorías solo se atienden de lunes a viernes.</div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn" onclick="setScreen('formulario')">Corregir y volver al formulario</button>
+            <button class="btn btn-primary" onclick="setScreen('confirmacion')">Reintentar y confirmar</button>
+          </div>
+        `;
+      } else if (name === 'confirmacion') {
+        stage.innerHTML = `
+          <div class="banner banner-ok" role="status">
+            ¡Reserva confirmada! Código: TUT-2026-4821
+          </div>
+          <h2>4. Confirmación de Tutoría</h2>
+          <div class="card">
+            <p><strong>Docente:</strong> ${protoState.docente}</p>
+            <p><strong>Asignatura:</strong> ${protoState.asignatura}</p>
+            <p><strong>Modalidad:</strong> ${protoState.modalidad}</p>
+            <p><strong>Fecha y horario:</strong> ${protoState.fecha} · ${protoState.horario}</p>
+            <p><strong>Estado:</strong> ${protoState.estadoReserva}</p>
+          </div>
+          <div class="actions">
+            <button class="btn" onclick="setScreen('formulario')">Volver al formulario</button>
+            <button class="btn btn-primary" onclick="setScreen('gestion')">Ir a Mis Reservas</button>
+          </div>
+        `;
+      } else if (name === 'gestion') {
+        stage.innerHTML = `
+          <h2>5. Gestión de Reservas (Modificar / Cancelar)</h2>
+          <div class="card">
+            <p><strong>Código:</strong> TUT-2026-4821 · <strong>Estado:</strong> ${protoState.estadoReserva}</p>
+            <p><strong>Docente:</strong> ${protoState.docente} | <strong>Horario:</strong> ${protoState.fecha} ${protoState.horario}</p>
+            <div class="actions">
+              <button class="btn" onclick="protoState.estadoReserva='Modificada'; setScreen('formulario')">Modificar reserva</button>
+              <button class="btn btn-danger" onclick="protoState.estadoReserva='Cancelada'; setScreen('gestion')">Cancelar reserva</button>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    buttons.forEach(b => b.addEventListener('click', () => setScreen(b.dataset.screen)));
+    setScreen('catalogo');
+  </script>
+</body>
+</html>
