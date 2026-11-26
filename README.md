@@ -56,4 +56,7 @@ Más detalles en [docs/arquitectura.md](docs/arquitectura.md).
 ## 7. Contribuciones
 | Integrante | Rol / Responsabilidad | Evidencia en Git |
 |---|---|---|
-| **Juan José Carvajal Jaya** | Arquitectura en capas, análisis UX, prototipo interactivo, implementación v1/v2, pruebas funcionales y documentación de evaluación | Historial verificable en rama `main` (`git log --oneline`) |
+| **Juan José Carvajal Jaya** | Arquitectura en capas (`domain`, `application`, `infrastructure`), integración principal, gestión de repositorio y versión v2 | Commits `74df0f8`, `029b9fa`, `3dedd56` en `main` |
+| **Mauricio Guevara** | Análisis UX, curva emocional, requisitos R1–R6, sitemap, user flow, wireframes y matriz de trazabilidad | Commit `8e66e5e` (`docs/` y `ux/`) en `main` |
+| **Erick López** | Prototipo interactivo navegable, diseño *mobile first*, accesibilidad WCAG 2.1 AA y mejoras visuales de presentación | Commits `8e66e5e`, `029b9fa`, `3dedd56` (`ux/prototipo/`, `src/presentation/`) |
+| **Eduardo Chicaiza** | Pruebas funcionales automatizadas (`tests/`), plan de evaluación, heurísticas de Nielsen, recorrido cognitivo, sesiones P00–P02 y evidencias antes/después | Commits `e7249ca`, `f1150ee`, `f12cd5e` (`tests/`, `evaluacion/`, `evidencias/`) |
