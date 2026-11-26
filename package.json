@@ -1,0 +1,12 @@
+{
+  "name": "tutoria-ux-uta",
+  "version": "1.0.0",
+  "description": "Sistema de gestión de tutorías universitarias - FISEI UTA (IHC)",
+  "type": "module",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": ["ihc", "ux", "usabilidad", "tutorias", "uta"],
+  "license": "MIT"
+}
