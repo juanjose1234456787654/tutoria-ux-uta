@@ -15,7 +15,7 @@ Aplicación web para la gestión de tutorías académicas de la Facultad de Inge
 - **Python 3** (o cualquier servidor estático como `npx serve` / Live Server) para servir los módulos ES6 en el navegador.
 
 ```bash
-git clone <URL-DEL-REPOSITORIO>
+git clone https://github.com/juanjose1234456787654/tutoria-ux-uta.git
 cd tutoria-ux-uta
 ```
 
