@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="420" viewBox="0 0 820 420">
+  <rect width="820" height="420" fill="#f7fafc"/>
+  <rect x="0" y="0" width="820" height="58" fill="#8b1e24"/>
+  <text x="24" y="36" fill="#ffffff" font-family="Segoe UI, sans-serif" font-size="20" font-weight="700">Tutoría UX (v1 — ANTES) · Hallazgo H-02: Validación tardía de fin de semana</text>
+
+  <rect x="28" y="80" width="764" height="310" rx="10" fill="#ffffff" stroke="#cbd5e0" stroke-width="1.5"/>
+  <text x="52" y="114" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="16" font-weight="700">Paso 1: Modalidad, fecha y horario (Comportamiento v1)</text>
+
+  <text x="52" y="148" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600">Fecha (lunes a viernes) *</text>
+  <rect x="52" y="158" width="280" height="40" rx="8" fill="#ffffff" stroke="#cbd5e0" stroke-width="1.5"/>
+  <text x="66" y="183" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="14">2026-11-28 (Sábado)</text>
+
+  <rect x="355" y="158" width="410" height="40" rx="8" fill="#fef3c7" stroke="#d97706"/>
+  <text x="370" y="183" fill="#92400e" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600">Problema v1: No avisa al elegir sábado; sigue mostrando horarios.</text>
+
+  <text x="52" y="226" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600">Horarios disponibles *</text>
+  <rect x="52" y="238" width="145" height="38" rx="8" fill="#fdf2f2" stroke="#8b1e24" stroke-width="1.5"/>
+  <text x="78" y="262" fill="#8b1e24" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700">09:00 - 09:30</text>
+  <rect x="210" y="238" width="145" height="38" rx="8" fill="#ffffff" stroke="#cbd5e0"/>
+  <text x="236" y="262" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13">14:00 - 14:30</text>
+
+  <rect x="52" y="302" width="713" height="62" rx="8" fill="#fee2e2" stroke="#991b1b" stroke-width="1.5"/>
+  <text x="68" y="328" fill="#991b1b" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700">Solo después de llenar todo el formulario y pulsar "Revisar reserva":</text>
+  <text x="68" y="349" fill="#991b1b" font-family="Segoe UI, sans-serif" font-size="13">"Las tutorías solo se atienden de lunes a viernes." → Retrasa la tarea (+27 s en P01/P02).</text>
+</svg>

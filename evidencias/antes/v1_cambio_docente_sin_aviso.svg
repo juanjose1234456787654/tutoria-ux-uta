@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="400" viewBox="0 0 820 400">
+  <rect width="820" height="400" fill="#f7fafc"/>
+  <rect x="0" y="0" width="820" height="58" fill="#8b1e24"/>
+  <text x="24" y="36" fill="#ffffff" font-family="Segoe UI, sans-serif" font-size="20" font-weight="700">Tutoría UX (v1 — ANTES) · Hallazgo H-01: Cambio de docente sin aviso</text>
+
+  <rect x="28" y="80" width="764" height="292" rx="10" fill="#ffffff" stroke="#cbd5e0" stroke-width="1.5"/>
+  <text x="52" y="114" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="16" font-weight="700">Paso 1: Cambio de docente tras seleccionar horario (v1)</text>
+
+  <text x="52" y="148" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600">Docente cambiado de "Ing. Valeria Mendoza" → "Ing. Carlos Paredes"</text>
+  <rect x="52" y="160" width="340" height="40" rx="8" fill="#ffffff" stroke="#cbd5e0" stroke-width="1.5"/>
+  <text x="66" y="185" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="14">Ing. Carlos Paredes, PhD.</text>
+
+  <text x="52" y="226" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600">Horarios disponibles *</text>
+  <rect x="52" y="238" width="145" height="38" rx="8" fill="#ffffff" stroke="#cbd5e0"/>
+  <text x="78" y="262" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13">10:00 - 10:30</text>
+  <rect x="210" y="238" width="145" height="38" rx="8" fill="#ffffff" stroke="#cbd5e0"/>
+  <text x="236" y="262" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13">11:00 - 11:30</text>
+
+  <rect x="52" y="296" width="713" height="54" rx="8" fill="#fee2e2" stroke="#991b1b" stroke-width="1.5"/>
+  <text x="68" y="320" fill="#991b1b" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700">Problema v1: La franja "09:00 - 09:30" desapareció sin ninguna notificación visible.</text>
+  <text x="68" y="339" fill="#991b1b" font-family="Segoe UI, sans-serif" font-size="13">El participante P01 intentó enviar pensando que aún tenía un horario seleccionado.</text>
+</svg>
