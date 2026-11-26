@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="420" viewBox="0 0 820 420">
+  <rect width="820" height="420" fill="#f7fafc"/>
+  <rect x="0" y="0" width="820" height="58" fill="#166534"/>
+  <text x="24" y="36" fill="#ffffff" font-family="Segoe UI, sans-serif" font-size="20" font-weight="700">Tutoría UX (v2 — DESPUÉS) · Corrección H-02: Validación temprana de fecha</text>
+
+  <rect x="28" y="80" width="764" height="310" rx="10" fill="#ffffff" stroke="#cbd5e0" stroke-width="1.5"/>
+  <text x="52" y="114" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="16" font-weight="700">Paso 1: Modalidad, fecha y horario (Comportamiento v2 corregido)</text>
+
+  <text x="52" y="148" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600">Fecha (lunes a viernes) *</text>
+  <rect x="52" y="158" width="280" height="40" rx="8" fill="#fff5f5" stroke="#991b1b" stroke-width="2"/>
+  <text x="66" y="183" fill="#991b1b" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600">2026-11-28 (Sábado)</text>
+  <text x="52" y="216" fill="#991b1b" font-family="Segoe UI, sans-serif" font-size="12.5" font-weight="600">Las tutorías solo se atienden de lunes a viernes.</text>
+
+  <rect x="355" y="158" width="410" height="40" rx="8" fill="#dcfce7" stroke="#166534"/>
+  <text x="370" y="183" fill="#166534" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600">Mejora v2: Valida de inmediato en change y marca aria-invalid.</text>
+
+  <text x="52" y="252" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600">Horarios disponibles *</text>
+  <rect x="52" y="264" width="713" height="46" rx="8" fill="#fee2e2" stroke="#991b1b" stroke-width="1.5"/>
+  <text x="68" y="292" fill="#991b1b" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600">Las tutorías solo se atienden de lunes a viernes. Elige un día entre lunes y viernes para cargar horarios.</text>
+
+  <rect x="52" y="328" width="713" height="44" rx="8" fill="#dcfce7" stroke="#166534"/>
+  <text x="68" y="355" fill="#166534" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700">Resultado en reevaluación v2: 0 errores en T1 y reducción de tiempo de 86.5 s a 59.5 s (-31.2%).</text>
+</svg>

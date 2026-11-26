@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="420" viewBox="0 0 820 420">
+  <rect width="820" height="420" fill="#f7fafc"/>
+  <rect x="0" y="0" width="820" height="58" fill="#166534"/>
+  <text x="24" y="36" fill="#ffffff" font-family="Segoe UI, sans-serif" font-size="20" font-weight="700">Tutoría UX (v2 — DESPUÉS) · Corrección H-01: Aviso explícito al cambiar docente</text>
+
+  <rect x="28" y="80" width="764" height="310" rx="10" fill="#ffffff" stroke="#cbd5e0" stroke-width="1.5"/>
+  <text x="52" y="114" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="16" font-weight="700">Paso 1: Cambio de docente tras seleccionar horario (v2 corregido)</text>
+
+  <text x="52" y="146" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600">Docente cambiado de "Ing. Valeria Mendoza" → "Ing. Carlos Paredes"</text>
+  <rect x="52" y="158" width="340" height="40" rx="8" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="66" y="183" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="14">Ing. Carlos Paredes, PhD.</text>
+
+  <rect x="52" y="216" width="713" height="46" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="68" y="244" fill="#075985" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700">Aviso inline (role="status"): Al cambiar de docente se reinició tu horario anterior (09:00 - 09:30). Selecciona una franja disponible.</text>
+
+  <text x="52" y="286" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600">Horarios disponibles del nuevo docente *</text>
+  <rect x="52" y="298" width="145" height="38" rx="8" fill="#ffffff" stroke="#cbd5e0"/>
+  <text x="78" y="322" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13">10:00 - 10:30</text>
+  <rect x="210" y="298" width="145" height="38" rx="8" fill="#ffffff" stroke="#cbd5e0"/>
+  <text x="236" y="322" fill="#1a202c" font-family="Segoe UI, sans-serif" font-size="13">11:00 - 11:30</text>
+
+  <rect x="52" y="348" width="713" height="30" rx="6" fill="#dcfce7" stroke="#166534"/>
+  <text x="68" y="368" fill="#166534" font-family="Segoe UI, sans-serif" font-size="12.5" font-weight="700">Resultado v2: Visibilidad del estado restaurada (Heurística H1); 0 ayudas requeridas en P01.</text>
+</svg>
