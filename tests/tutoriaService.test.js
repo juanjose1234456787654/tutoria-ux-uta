@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 
 import { TutoriaService } from '../src/application/tutoriaService.js';
 import { ESTADOS_RESERVA, MODALIDADES } from '../src/domain/models.js';
-import { validarDatosReserva } from '../src/domain/validators.js';
+import { validarDatosReserva, validarFechaIndividual } from '../src/domain/validators.js';
 import { StorageRepository, crearMemoriaStorage } from '../src/infrastructure/storageRepository.js';
 
 function crearServicioPrueba() {
@@ -171,4 +171,40 @@ test('Cancelar reserva cambia estado a Cancelada y libera el horario', () => {
 
   slots = service.obtenerHorariosConEstado('doc-3', FECHA_HABIL);
   assert.equal(slots.find((s) => s.horario === '08:30 - 09:00').disponible, true);
+});
+
+test('v2 (H-02): validarFechaIndividual rechaza fines de semana y fechas pasadas de forma temprana', () => {
+  const sabado = validarFechaIndividual('2026-11-28', FECHA_MINIMA);
+  assert.equal(sabado.valido, false);
+  assert.match(sabado.error, /lunes a viernes/i);
+
+  const pasada = validarFechaIndividual('2026-11-20', FECHA_MINIMA);
+  assert.equal(pasada.valido, false);
+  assert.match(pasada.error, /anterior/i);
+
+  const valida = validarFechaIndividual(FECHA_HABIL, FECHA_MINIMA);
+  assert.equal(valida.valido, true);
+  assert.equal(valida.error, '');
+});
+
+test('v2 (H-01/R2): cambiar a docente con modalidad exclusiva rechaza modalidad incompatible', () => {
+  const service = crearServicioPrueba();
+
+  // doc-3 (Ing. Sofía Villacís) solo atiende Virtual
+  const res = service.crearReserva(
+    {
+      docenteId: 'doc-3',
+      asignaturaId: 'bd',
+      modalidad: MODALIDADES.PRESENCIAL,
+      fecha: FECHA_HABIL,
+      horario: '08:30 - 09:00',
+      estudianteNombre: 'Pedro Ruiz',
+      estudianteCorreo: 'pruiz@uta.edu.ec',
+      motivo: 'Consulta sobre consultas SQL avanzadas',
+    },
+    { fechaMinima: FECHA_MINIMA }
+  );
+
+  assert.equal(res.ok, false);
+  assert.ok(res.errores.modalidad);
 });

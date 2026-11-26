@@ -8,6 +8,26 @@ import { MODALIDADES } from './models.js';
 const EMAIL_UTA_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
+ * Valida individualmente la fecha de tutoría (v2 - H-02 validación temprana).
+ * @param {string} fecha
+ * @param {string} [fechaMinima]
+ * @returns {{ valido: boolean, error: string }}
+ */
+export function validarFechaIndividual(fecha, fechaMinima = obtenerFechaHoyISO()) {
+  if (!fecha) {
+    return { valido: false, error: 'Selecciona una fecha para la tutoría.' };
+  }
+  if (fecha < fechaMinima) {
+    return { valido: false, error: 'La fecha no puede ser anterior al día de hoy.' };
+  }
+  const diaSemana = obtenerDiaSemanaISO(fecha);
+  if (diaSemana === 0 || diaSemana === 6) {
+    return { valido: false, error: 'Las tutorías solo se atienden de lunes a viernes.' };
+  }
+  return { valido: true, error: '' };
+}
+
+/**
  * Valida los datos de una solicitud de reserva o modificación.
  * Devuelve un objeto con { valido: boolean, errores: Record<string, string> }.
  * @param {object} datos
@@ -31,17 +51,9 @@ export function validarDatosReserva(datos, opciones = {}) {
     errores.modalidad = 'Elige una modalidad válida (Presencial o Virtual).';
   }
 
-  if (!datos.fecha) {
-    errores.fecha = 'Selecciona una fecha para la tutoría.';
-  } else {
-    const fechaMin = opciones.fechaMinima || obtenerFechaHoyISO();
-    if (datos.fecha < fechaMin) {
-      errores.fecha = 'La fecha no puede ser anterior al día de hoy.';
-    }
-    const diaSemana = obtenerDiaSemanaISO(datos.fecha);
-    if (diaSemana === 0 || diaSemana === 6) {
-      errores.fecha = 'Las tutorías solo se atienden de lunes a viernes.';
-    }
+  const validacionFecha = validarFechaIndividual(datos.fecha, opciones.fechaMinima || obtenerFechaHoyISO());
+  if (!validacionFecha.valido) {
+    errores.fecha = validacionFecha.error;
   }
 
   if (!datos.horario) {

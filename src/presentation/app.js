@@ -5,7 +5,7 @@
  */
 
 import { TutoriaService } from '../application/tutoriaService.js';
-import { validarDatosReserva, obtenerFechaHoyISO } from '../domain/validators.js';
+import { validarDatosReserva, validarFechaIndividual, obtenerFechaHoyISO } from '../domain/validators.js';
 import { StorageRepository } from '../infrastructure/storageRepository.js';
 import {
   escaparHTML,
@@ -222,7 +222,28 @@ function actualizarOpcionesPorDocente(limpiarIncompatibles = true) {
   }
 }
 
-function renderHorariosDisponibles() {
+function validarFechaTempranaUI() {
+  const errEl = document.getElementById('err-fecha');
+  if (!dom.campoFecha.value) {
+    if (errEl) errEl.textContent = '';
+    dom.campoFecha.removeAttribute('aria-invalid');
+    return true;
+  }
+
+  const res = validarFechaIndividual(dom.campoFecha.value);
+  if (!res.valido) {
+    if (errEl) errEl.textContent = res.error;
+    dom.campoFecha.setAttribute('aria-invalid', 'true');
+    horarioSeleccionado = '';
+    return false;
+  }
+
+  if (errEl) errEl.textContent = '';
+  dom.campoFecha.removeAttribute('aria-invalid');
+  return true;
+}
+
+function renderHorariosDisponibles(avisoExtra = '') {
   const docenteId = dom.campoDocente.value;
   const fecha = dom.campoFecha.value;
   const excluirId = dom.reservaIdEdicion.value || null;
@@ -233,32 +254,44 @@ function renderHorariosDisponibles() {
     return;
   }
 
+  const validacionFecha = validarFechaIndividual(fecha);
+  if (!validacionFecha.valido) {
+    dom.contenedorHorarios.innerHTML = `<p class="slot-notice slot-notice-error" role="alert">${escaparHTML(validacionFecha.error)} Elige un día entre lunes y viernes para cargar horarios.</p>`;
+    return;
+  }
+
   const slots = service.obtenerHorariosConEstado(docenteId, fecha, excluirId);
   if (slots.length === 0) {
     dom.contenedorHorarios.innerHTML = '<p class="hint-text">No hay horarios configurados para este docente.</p>';
     return;
   }
 
-  dom.contenedorHorarios.innerHTML = slots
-    .map((slot) => {
-      const checked = slot.disponible && horarioSeleccionado === slot.horario ? 'checked' : '';
-      const disabled = slot.disponible ? '' : 'disabled';
-      const claseDisabled = slot.disponible ? '' : 'is-disabled';
-      const etiquetaEstado = slot.disponible ? '' : ' (Ocupado)';
-      return `
-        <label class="slot-option ${claseDisabled}">
-          <input
-            type="radio"
-            name="horario"
-            value="${escaparHTML(slot.horario)}"
-            ${checked}
-            ${disabled}
-          />
-          <span>${escaparHTML(slot.horario)}${etiquetaEstado}</span>
-        </label>
-      `;
-    })
-    .join('');
+  const avisoHtml = avisoExtra
+    ? `<p class="slot-notice" role="status">${escaparHTML(avisoExtra)}</p>`
+    : '';
+
+  dom.contenedorHorarios.innerHTML =
+    avisoHtml +
+    slots
+      .map((slot) => {
+        const checked = slot.disponible && horarioSeleccionado === slot.horario ? 'checked' : '';
+        const disabled = slot.disponible ? '' : 'disabled';
+        const claseDisabled = slot.disponible ? '' : 'is-disabled';
+        const etiquetaEstado = slot.disponible ? '' : ' (Ocupado)';
+        return `
+          <label class="slot-option ${claseDisabled}">
+            <input
+              type="radio"
+              name="horario"
+              value="${escaparHTML(slot.horario)}"
+              ${checked}
+              ${disabled}
+            />
+            <span>${escaparHTML(slot.horario)}${etiquetaEstado}</span>
+          </label>
+        `;
+      })
+      .join('');
 }
 
 function limpiarErroresFormulario() {
@@ -412,15 +445,31 @@ function registrarEventos() {
     prepararNuevaReserva(btn.dataset.docenteId);
   });
 
-  // Cambios en formulario con persistencia automática de borrador
+  // Cambios en formulario con persistencia automática de borrador (v2: H-01 y H-02)
   dom.campoDocente.addEventListener('change', () => {
+    const horarioPrevio = horarioSeleccionado;
+    const nuevoDocente = service.obtenerDocentePorId(dom.campoDocente.value);
     actualizarOpcionesPorDocente();
-    renderHorariosDisponibles();
+
+    let avisoCambio = '';
+    if (horarioPrevio && (!nuevoDocente || !nuevoDocente.horarios.includes(horarioPrevio))) {
+      horarioSeleccionado = '';
+      avisoCambio = `Al cambiar de docente se reinició tu horario anterior (${horarioPrevio}). Selecciona una franja disponible.`;
+      mostrarAlerta('info', avisoCambio);
+    }
+
+    renderHorariosDisponibles(avisoCambio);
     guardarBorradorActual();
   });
 
   dom.campoFecha.addEventListener('change', () => {
+    const fechaValida = validarFechaTempranaUI();
     renderHorariosDisponibles();
+    if (!fechaValida) {
+      mostrarAlerta('error', 'Las tutorías solo se atienden de lunes a viernes y a partir de hoy.');
+    } else {
+      limpiarAlerta();
+    }
     guardarBorradorActual();
   });
 

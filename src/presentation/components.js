@@ -36,6 +36,7 @@ export function renderTarjetaDocente(docente, asignaturasMap) {
     <article class="docente-card">
       <div class="docente-header">
         <h3>${escaparHTML(docente.nombre)}</h3>
+        <span class="badge badge-slots">${docente.horarios.length} horarios diarios</span>
       </div>
       <p class="docente-meta">${escaparHTML(docente.especialidad)}</p>
       <p class="docente-meta"><strong>Ubicación:</strong> ${escaparHTML(docente.oficina)}</p>
